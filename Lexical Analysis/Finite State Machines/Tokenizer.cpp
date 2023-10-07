@@ -193,3 +193,54 @@ std::vector<Token> Tokenizer::tokenize() {
     return tokens;
 }
  
+
+// Functions to check if a character belongs to a certain category
+bool Tokenizer::isLetter(char c) {
+    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+}
+bool Tokenizer::isDigit(char c) {
+    return c >= '0' && c <= '9';
+}
+bool Tokenizer::isUnderscore(char c) {
+    return c == '_';
+}
+bool Tokenizer::isOperator(char c) {
+    return c == '+' || c == '-' || c == '*' || c == '/' || c == '%' || c == '=' || c == '<' || c == '>' || c == '!' || c == '&' || c == '|';
+}
+bool Tokenizer::isDelimiter(char c) {
+    return c == '(' || c == ')' || c == '{' || c == '}' || c == '[' || c == ']' || c == ',' || c == ';' || c == ':';
+}
+bool Tokenizer::isWhitespace(char c) {
+    return c == ' ' || c == '\t' || c == '\n' || c == '\r';
+}
+bool Tokenizer::isQuote(char c) {
+    return c == '"' || c == '\'';
+}
+bool Tokenizer::isComment(char c) {
+    return c == '/';
+}
+bool Tokenizer::isFloat(char c) {
+    return c == '.';
+}
+bool Tokenizer::isExponent(char c) {
+    return c == 'e' || c == 'E';
+}
+bool Tokenizer::isSign(char c) {
+    return c == '+' || c == '-';
+}
+bool Tokenizer::isHex(char c) {
+    return (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F') || isDigit(c);
+}
+bool Tokenizer::isOctal(char c) {
+    return c >= '0' && c <= '7';
+}
+bool Tokenizer::isBinary(char c) {
+    return c == '0' || c == '1';
+}
+bool Tokenizer::isEscape(char c) {
+    return c == '\\';
+}
+bool Tokenizer::isInvalid(char c) {
+    return !isLetter(c) && !isDigit(c) && !isUnderscore(c) && !isOperator(c) && !isDelimiter(c) && !isWhitespace(c) && !isQuote(c) && !isComment(c);
+}
+ 
