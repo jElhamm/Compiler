@@ -244,3 +244,25 @@ bool Tokenizer::isInvalid(char c) {
     return !isLetter(c) && !isDigit(c) && !isUnderscore(c) && !isOperator(c) && !isDelimiter(c) && !isWhitespace(c) && !isQuote(c) && !isComment(c);
 }
  
+
+// Token Type
+TokenType Tokenizer::getTokenType(State state) {
+    switch (state) {
+        case IDENTIFIER:
+            return IDENTIFIER_TOKEN;
+        case INTEGER:
+            return INTEGER_TOKEN;
+        case FLOAT:
+            return FLOAT_TOKEN;
+        case OPERATOR:
+            return OPERATOR_TOKEN;
+        case STRING:
+            return STRING_TOKEN;
+        case COMMENT:
+            return COMMENT_TOKEN;
+        case ERROR:
+            return ERROR_TOKEN;
+        default:
+            return ERROR_TOKEN;
+    }
+}
