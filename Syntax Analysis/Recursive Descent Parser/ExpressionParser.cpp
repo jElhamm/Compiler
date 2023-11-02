@@ -52,3 +52,30 @@ bool ExpressionParser::factor() {
     return true;
 }
  
+// Function to parse a term in the expression
+bool ExpressionParser::term() {
+    if (!factor()) {
+        return false;
+    }
+    while (position < input.length() && isOperator(input[position])) {
+        position++;
+        if (!factor()) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Function to parse an expression
+bool ExpressionParser::expression() {
+    if (!term()) {
+        return false;
+    }
+    while (position < input.length() && isOperator(input[position])) {
+        position++;
+        if (!term()) {
+            return false;
+        }
+    }
+    return true;
+}
