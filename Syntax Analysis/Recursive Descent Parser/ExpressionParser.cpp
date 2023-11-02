@@ -21,3 +21,34 @@ bool ExpressionParser::isIdentifier(char ch) const {
     return std::isalpha(ch);
 }
  
+// Function to match the expected character in the input string
+void ExpressionParser::match(char expected) {
+    if (position < input.length() && input[position] == expected) {
+        position++;
+    } else {
+        throw std::runtime_error("Expected '" + std::string(1, expected) + "'");
+    }
+}
+
+// Function to parse a factor in the expression
+bool ExpressionParser::factor() {
+    if (position < input.length()) {
+        if (isIdentifier(input[position]) || std::isdigit(input[position])) {
+            position++;
+        } else if (input[position] == '(') {
+            position++;
+            // Parse the expression within the parentheses
+            if (!expression()) {
+                return false;
+            }
+            // After parsing the expression, expect a closing parenthesis
+            match(')');
+        } else {
+            throw std::runtime_error("Invalid character");
+        }
+    } else {
+        throw std::runtime_error("Unexpected end of input");
+    }
+    return true;
+}
+ 
