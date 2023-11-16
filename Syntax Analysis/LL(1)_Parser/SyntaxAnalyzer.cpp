@@ -37,10 +37,41 @@ void SyntaxAnalyzer::consumeInputSymbol() {
     inputString = inputString.substr(1);
 }
 
+void SyntaxAnalyzer::parse(){
+    while (!parseStack.empty()){
+        std::string top = parseStack.top();
+        std::string symbol = getInputSymbol();
+
+        if (top==symbol) {
+            parseStack.pop();
+            consumeInputSymbol();
+            std::cout << "*** Matched: " << symbol << std::endl;
+        } else{
+            if (parsingTable.count(top) && parsingTable[top].count(symbol)) {
+                std::string production = parsingTable[top][symbol];
+                parseStack.pop();
+                if (production != "epsilon") {
+                    // Push the production onto the stack in reverse order
+                    for (int i = production.length() - 1; i >= 0; --i) {
+                        parseStack.push(production.substr(i, 1));
+                    }
+                }
+                std::cout << "---> Applied production: " << top << " -> " << production << std::endl;
+            } else{
+                std::cout << "---> Error: Invalid input";
+                if (!parseStack.empty()) {
+                    std::cout << " - Expected: " << parseStack.top();
+                }
+                std::cout << std::endl;
+                return;
+            }
+        }
+    }
+}
 
 void SyntaxAnalyzer::analyze() {
     initParsingTable();
-    std::cout << "Enter the input string: ";
+    std::cout << "---> Enter the input string: ";
     std::getline(std::cin, inputString);
     parse();
 }
