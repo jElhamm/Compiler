@@ -28,3 +28,19 @@ void SyntaxAnalyzer::initParsingTable() {
     parseStack.push("E");
 }
  
+// Get the next input symbol from the input string
+std::string SyntaxAnalyzer::getInputSymbol() {
+    return inputString.substr(0, 1);
+}
+// Consume the input symbol from the input string
+void SyntaxAnalyzer::consumeInputSymbol() {
+    inputString = inputString.substr(1);
+}
+
+
+void SyntaxAnalyzer::analyze() {
+    initParsingTable();
+    std::cout << "Enter the input string: ";
+    std::getline(std::cin, inputString);
+    parse();
+}
