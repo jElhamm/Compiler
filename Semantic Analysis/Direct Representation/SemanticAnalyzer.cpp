@@ -25,6 +25,25 @@ void SemanticAnalyzer::declareFunction(const std::string& functionName, const st
     declaredFunctions.insert(functionName);
     functionReturnTypes[functionName] = returnType;
 }
+void SemanticAnalyzer::analyze(const std::string& sourceCode) {
+    std::string token;
+    std::istringstream tokenStream(sourceCode);
+    while (tokenStream >> token) {
+        if (token == "var") {
+            std::string variableName;
+            std::string variableType;
+            tokenStream >> variableName >> variableType;
+            declareVariable(variableName, variableType);                                                // Declares a variable with the given name and type
+            cout << "---> Declared variable: " << variableType << " " << variableName << "\n";          
+        } else if (isDeclared(token)) {
+            cout << "---> Used variable: " << token << " (" << variableTypes[token] << ")\n";           // Prints the usage of a variable that has been declared
+        } else if (declaredFunctions.count(token)) {
+            cout << "---> Used function: " << token << " (" << functionReturnTypes[token] << ")\n";     // Prints the usage of a function that has been declared
+        } else {
+            cout << " ! Error: Undefined name used: " << token << "\n";                                 // Prints an error message for an undefined name
+        }
+    }
+}
 std::unordered_set<std::string>& SemanticAnalyzer::getDeclaredVariables() {
     return declaredVariables;
 }
