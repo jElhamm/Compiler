@@ -81,4 +81,15 @@ void gotos(int symbol) {
     }
     closure(item, l);                                // call closure function with item set and l as arguments
 }
- 
+
+void print_state(int n) {
+    printf("\nstate %d\n", n);
+    int i;
+    for (i = 0; i < count; i++) {
+        if (I[i]->dot >= strlen(I[i]->rhs))
+            continue;
+        printf("%c->", I[i]->lhs);
+        printf("%s.", I[i]->rhs);
+        printf("\n");
+    }
+}
