@@ -66,5 +66,6 @@ extern void initializeGrammar(Grammar *grammar);
 extern void freeMemory(Grammar *grammar);
 int getNonTerminalIndex(Grammar *grammar, char nonTerminal);
 int getTerminalIndex(Grammar *grammar, char terminal);
+void closure(Grammar *grammar, LR0Item *state, int *stateSize);
 
 #endif                   
