@@ -67,5 +67,6 @@ extern void freeMemory(Grammar *grammar);
 int getNonTerminalIndex(Grammar *grammar, char nonTerminal);
 int getTerminalIndex(Grammar *grammar, char terminal);
 void closure(Grammar *grammar, LR0Item *state, int *stateSize);
+int goTo(Grammar *grammar, LR0Transition *transition, int transitionSize, int fromState, char symbol);
 
 #endif                   

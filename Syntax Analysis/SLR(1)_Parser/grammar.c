@@ -65,6 +65,64 @@ void closure(Grammar *grammar, LR0Item *state, int *stateSize) {
     *stateSize = closureSize;  // Update the size of the state
 }
 //***************************************************************************************************************************
+// Compute the Goto transition for a given LR0 item set and symbol
+int goTo(Grammar *grammar, LR0Transition *transition, int transitionSize, int fromState, char symbol) {
+    int closureSize = 0;
+    LR0Item state[grammar->productionsCount];
+    // Iterate over the transitions
+    for (int i = 0; i < transitionSize; i++) {
+        Item *item = &(grammar->closure[transition[i].fromState].item);
+        // If the dot is before the given symbol, create a new item by advancing the dot and add it to the state
+        if (item->dotPosition < strlen(item->production) && item->production[item->dotPosition] == symbol) {
+            state[closureSize] = grammar->closure[transition[i].fromState];
+            state[closureSize].item.dotPosition++;
+            closureSize++;
+        }
+    }
+
+    closure(grammar, state, &closureSize);  // Compute the closure of the state
+    int stateIndex = -1;
+    // Check if the state already exists in the grammar's closure set
+    for (int i = 0; i < grammar->statesCount; i++) {
+        int flag = 0;
+        if (closureSize != grammar->closureSize) {
+            flag = 1;
+        } else {
+            for (int j = 0; j < closureSize; j++) {
+                int found = 0;
+                for (int k = 0; k < grammar->closureSize; k++) {
+                    if (strcmp(state[j].item.production, grammar->closure[k].item.production) == 0 &&
+                        state[j].item.dotPosition == grammar->closure[k].item.dotPosition &&
+                        strcmp(state[j].item.lookahead, grammar->closure[k].item.lookahead) == 0) {
+                        found = 1;
+                        break;
+                    }
+                }
+                if (!found) {
+                    flag = 1;
+                    break;
+                }
+            }
+        }
+        if (!flag) {
+            stateIndex = i;
+            break;
+        }
+    }
+    // If the state doesn't exist, create a new transition and state in the grammar
+    if (stateIndex == -1) {
+        grammar->transitions[transitionSize].symbol = symbol;
+        grammar->transitions[transitionSize].fromState = fromState;
+        grammar->transitions[transitionSize].toState = grammar->statesCount;
+        transitionSize++; // Increment transitionSize
+        grammar->table = (SLR1TableEntry **)realloc(grammar->table, (grammar->statesCount + 1) * sizeof(SLR1TableEntry *));
+        // Allocate memory for the table entry of the new state
+        grammar->table[grammar->statesCount] = (SLR1TableEntry *)malloc((strlen(grammar->terminals) + strlen(grammar->nonTerminals) + 1) * sizeof(SLR1TableEntry));
+        grammar->statesCount++; // Increment grammar->statesCount
+    }
+    return stateIndex;
+}
+//***************************************************************************************************************************
 // Initialize the grammar structure
 void initializeGrammar(Grammar *grammar) {
     strcpy(grammar->nonTerminals, "");
