@@ -9,6 +9,7 @@
 
 
 void addToFirstSet(char firstSet[], int *firstSetIndex, char symbol);
+void findFirstSet(Rule rules[], int ruleCount, char nonTerminal, char firstSet[], int *firstSetIndex);
 
 
 #endif
