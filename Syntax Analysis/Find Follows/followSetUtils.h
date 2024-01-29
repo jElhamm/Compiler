@@ -8,6 +8,7 @@
 
 
 void addToFollowSet(char followSet[], int *followSetIndex, char symbol);
+void findFollowSet(Rule rules[], int ruleCount, char nonTerminal, char followSet[], int *followSetIndex);
 
 
 #endif
